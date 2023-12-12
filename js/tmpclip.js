@@ -13,7 +13,6 @@ function handleClick() {
     })
         .then((response) => response.json())
         .then((response) => {
-            console.log(response);
             var dstUrl = window.location.origin +
                 window.location.pathname.split("/").slice(0, -1).join("/") +
                 "/decode.html?code=" + bin + "&key=" + key;
@@ -26,8 +25,8 @@ function handleClick() {
             })
                 .then((response) => response.json())
                 .then((response) => {
-                    console.log(response);
                     var url = response["link_url"];
+                    document.getElementById("loading").hidden = true;
                     window.location.href = "./link.html?link=" + url;
                 })
                 .catch((error) => {
