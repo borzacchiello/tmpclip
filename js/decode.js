@@ -13,6 +13,19 @@ function transformToAssocArray(prmstr) {
     return params;
 }
 
+function sanitize(string) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#x27;',
+        "/": '&#x2F;',
+    };
+    const reg = /[&<>"'/]/ig;
+    return string.replace(reg, (match) => (map[match]));
+}
+
 window.onload = function () {
     const out = document.getElementById("output");
     var params = getSearchParameters();
@@ -25,7 +38,7 @@ window.onload = function () {
         .then((response) => response.text())
         .then((response) => {
             var decoded = CryptoJS.AES.decrypt(response, params["key"]);
-            out.innerHTML = decoded.toString(CryptoJS.enc.Utf8);
+            out.innerHTML = sanitize(decoded.toString(CryptoJS.enc.Utf8));
         })
         .catch((error) => {
             console.error('Error:', error);
