@@ -17,16 +17,17 @@ window.onload = function () {
     const out = document.getElementById("output");
     var params = getSearchParameters();
 
-    fetch(params["link"], {
+    fetch("https://filebin.net/" + params["code"] + "/clipboard.txt", {
         method: "GET",
-        headers: {}
+        headers: {},
+        redirect: 'follow'
     })
-    .then((response) => response.json())
-    .then((response) => {
-        var decoded = CryptoJS.AES.decrypt(response, params["key"]);
-        out.innerHTML = decoded;
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+        .then((response) => response.text())
+        .then((response) => {
+            var decoded = CryptoJS.AES.decrypt(response, params["key"]);
+            out.innerHTML = decoded.toString(CryptoJS.enc.Utf8);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 }

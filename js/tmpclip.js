@@ -1,29 +1,22 @@
 function handleClick() {
     const data = document.getElementById("msg_data");
+    document.getElementById("loading").hidden = false;
 
     var key = CryptoJS.lib.WordArray.random(16).toString();
-    var dataEnc = CryptoJS.AES.encrypt(data.value, key).toString();
+    var bin = CryptoJS.lib.WordArray.random(16).toString();
+    var dataEnc = CryptoJS.AES.encrypt(data.value, key);
 
-    var fileStringArray = [dataEnc];
-    var fileName = "clipboard.txt";
-    var blobAttrs = { type: "text/plain" };
-    var file = new File(fileStringArray, fileName, blobAttrs);
-
-    var fd = new FormData();
-    fd.append("file", file, file.name);
-
-    fetch("https://tmpfiles.org/api/v1/upload", {
+    fetch("https://filebin.net/" + bin + "/clipboard.txt", {
         method: "POST",
-        body: fd,
+        body: dataEnc,
         headers: {}
     })
         .then((response) => response.json())
         .then((response) => {
             console.log(response);
-            var dataUrl = response.data["url"];
-            dataUrl = dataUrl.replace(".org", ".org/dl");
-
-            var dstUrl = window.location.origin + "/decode.html?link=" + dataUrl + "&key=" + key;
+            var dstUrl = window.location.origin +
+                window.location.pathname.split("/").slice(0, -1).join("/") +
+                "/decode.html?code=" + bin + "&key=" + key;
             fetch("https://url.api.stdlib.com/temporary@0.3.0/create", {
                 method: "POST",
                 body: JSON.stringify({ "url": dstUrl, "ttl": 300 }),
