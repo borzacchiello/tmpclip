@@ -16,16 +16,17 @@ function handleClick() {
             var dstUrl = window.location.origin +
                 window.location.pathname.split("/").slice(0, -1).join("/") +
                 "/decode.html?code=" + bin + "&key=" + key;
-            fetch("https://url.api.stdlib.com/temporary@0.3.0/create", {
+            fetch("https://spoo.me", {
                 method: "POST",
-                body: JSON.stringify({ "url": dstUrl, "ttl": 300 }),
+                body: "max-clicks=1&url=" + encodeURIComponent(dstUrl),
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Accept": "application/json"
                 }
             })
                 .then((response) => response.json())
                 .then((response) => {
-                    var url = response["link_url"];
+                    var url = response["short_url"];
                     document.getElementById("loading").hidden = true;
                     window.location.href = "./link.html?link=" + url;
                 })
