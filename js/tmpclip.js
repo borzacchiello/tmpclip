@@ -6,12 +6,14 @@ function handleClick() {
     var bin = CryptoJS.lib.WordArray.random(16).toString();
     var dataEnc = CryptoJS.AES.encrypt(data.value, key);
 
-    fetch("https://filebin.net/" + bin + "/clipboard.txt", {
+    const formData = new FormData();
+    formData.append('content', dataEnc);
+
+    fetch("https://fars.ee/~" + bin, {
         method: "POST",
-        body: dataEnc,
+        body: formData,
         headers: {}
     })
-        .then((response) => response.json())
         .then((response) => {
             var dstUrl = window.location.origin +
                 window.location.pathname.split("/").slice(0, -1).join("/") +

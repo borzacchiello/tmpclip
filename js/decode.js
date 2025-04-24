@@ -30,7 +30,7 @@ window.onload = function () {
     const out = document.getElementById("output");
     var params = getSearchParameters();
 
-    fetch("https://filebin.net/" + params["code"] + "/clipboard.txt", {
+    fetch("https://fars.ee/~" + params["code"], {
         method: "GET",
         headers: {},
         redirect: 'follow'
