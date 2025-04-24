@@ -1,3 +1,15 @@
+function showError(message) {
+    const errorDiv = document.getElementById('errorNotification');
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.textContent = message;
+    errorDiv.classList.add('show');
+}
+
+function closeError() {
+    const errorDiv = document.getElementById('errorNotification');
+    errorDiv.classList.remove('show');
+}
+
 function handleClick() {
     const data = document.getElementById("msg_data");
     document.getElementById("loading").hidden = false;
@@ -15,6 +27,11 @@ function handleClick() {
         headers: {}
     })
         .then((response) => {
+            if (!response["ok"]) {
+                document.getElementById("loading").hidden = true;
+                showError("unable to create bin");
+                return;
+            }
             var dstUrl = window.location.origin +
                 window.location.pathname.split("/").slice(0, -1).join("/") +
                 "/decode.html?code=" + bin + "&key=" + key;
