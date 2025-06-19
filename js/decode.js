@@ -37,6 +37,13 @@ window.onload = function () {
     })
         .then((response) => response.text())
         .then((response) => {
+            var c    = response[0];
+            response = response.substring(1);
+            if (c == "e") {
+                let pass = prompt("Password", "secret code...");
+                response = CryptoJS.AES.decrypt(response, pass).toString(CryptoJS.enc.Utf8);
+            }
+
             var decoded = CryptoJS.AES.decrypt(response, params["key"]);
             out.innerHTML = sanitize(decoded.toString(CryptoJS.enc.Utf8));
         })

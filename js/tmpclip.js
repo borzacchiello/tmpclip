@@ -11,12 +11,20 @@ function closeError() {
 }
 
 function handleClick() {
-    const data = document.getElementById("msg_data");
     document.getElementById("loading").hidden = false;
+    var data     = document.getElementById("msg_data");
+    var password = document.getElementById("password");
 
     var key = CryptoJS.lib.WordArray.random(16).toString();
     var bin = CryptoJS.lib.WordArray.random(16).toString();
     var dataEnc = CryptoJS.AES.encrypt(data.value, key);
+
+    if (password.value != "") {
+        dataEnc = CryptoJS.AES.encrypt(dataEnc.toString(), password.value);
+        dataEnc = "e" + dataEnc.toString();
+    } else {
+        dataEnc = " " + dataEnc.toString();
+    }
 
     const formData = new FormData();
     formData.append('content', dataEnc);
